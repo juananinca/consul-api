@@ -20,13 +20,13 @@ public abstract class AbstractHttpTransport implements HttpTransport {
 
 	private static final Logger log = Logger.getLogger(AbstractHttpTransport.class.getName());
 
-	static final int DEFAULT_MAX_CONNECTIONS = 1000;
-	static final int DEFAULT_MAX_PER_ROUTE_CONNECTIONS = 500;
-	static final int DEFAULT_CONNECTION_TIMEOUT = 10 * 1000; // 10 sec
+	static final int DEFAULT_MAX_CONNECTIONS = 10;
+	static final int DEFAULT_MAX_PER_ROUTE_CONNECTIONS = 5;
+	static final int DEFAULT_CONNECTION_TIMEOUT = 2 * 1000; // 2 sec
 
 	// 10 minutes for read timeout due to blocking queries timeout
 	// https://www.consul.io/api/index.html#blocking-queries
-	static final int DEFAULT_READ_TIMEOUT = 1000 * 60 * 10; // 10 min
+	static final int DEFAULT_READ_TIMEOUT = 1000 * 5; // 5 seg
 
 	@Override
 	public HttpResponse makeGetRequest(HttpRequest request) {
