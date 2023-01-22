@@ -20,14 +20,16 @@ public class ConsulRawClient {
 	// one real HTTP client for all instances
 	private static final HttpTransport DEFAULT_HTTP_TRANSPORT = new DefaultHttpTransport();
 
-	private final HttpTransport httpTransport;
+	private HttpTransport httpTransport;
 	private final String agentAddress;
+	private TLSConfig lastTlsConfigLoaded;
 
 	public static final class Builder {
 		private String agentHost;
 		private int agentPort;
 		private String agentPath;
 		private HttpTransport httpTransport;
+		private TLSConfig lastTlsConfigLoaded;
 
 		public static ConsulRawClient.Builder builder() {
 			return new ConsulRawClient.Builder();
@@ -57,6 +59,7 @@ public class ConsulRawClient {
 
 		public Builder setTlsConfig(TLSConfig tlsConfig) {
 			this.httpTransport = new DefaultHttpsTransport(tlsConfig);
+			this.lastTlsConfigLoaded = tlsConfig;
 			return this;
 		}
 
@@ -66,7 +69,9 @@ public class ConsulRawClient {
 		}
 
 		public ConsulRawClient build() {
-			return new ConsulRawClient(httpTransport, agentHost, agentPort, agentPath);
+			ConsulRawClient consulRawClient = new ConsulRawClient(httpTransport, agentHost, agentPort, agentPath);
+			consulRawClient.lastTlsConfigLoaded = this.lastTlsConfigLoaded;
+			return consulRawClient;
 		}
 	}
 
@@ -197,6 +202,9 @@ public class ConsulRawClient {
 		} else {
 			return url;
 		}
+	}
+	public void refreshTlsConnection() {
+		this.httpTransport = new DefaultHttpsTransport(this.lastTlsConfigLoaded);
 	}
 
 }

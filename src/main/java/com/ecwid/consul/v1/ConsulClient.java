@@ -74,18 +74,20 @@ public class ConsulClient implements
 	private final QueryClient queryClient;
 	private final SessionClient sessionClient;
 	private final StatusClient statusClient;
+	private final ConsulRawClient consulRawClient;
 
 	public ConsulClient(ConsulRawClient rawClient) {
-		aclClient = new AclConsulClient(rawClient);
-		agentClient = new AgentConsulClient(rawClient);
-		catalogClient = new CatalogConsulClient(rawClient);
-		coordinateClient = new CoordinateConsulClient(rawClient);
-		eventClient = new EventConsulClient(rawClient);
-		healthClient = new HealthConsulClient(rawClient);
-		keyValueClient = new KeyValueConsulClient(rawClient);
-		queryClient = new QueryConsulClient(rawClient);
-		sessionClient = new SessionConsulClient(rawClient);
-		statusClient = new StatusConsulClient(rawClient);
+		this.consulRawClient = rawClient;
+		aclClient = new AclConsulClient(this.consulRawClient);
+		agentClient = new AgentConsulClient(this.consulRawClient);
+		catalogClient = new CatalogConsulClient(this.consulRawClient);
+		coordinateClient = new CoordinateConsulClient(this.consulRawClient);
+		eventClient = new EventConsulClient(this.consulRawClient);
+		healthClient = new HealthConsulClient(this.consulRawClient);
+		keyValueClient = new KeyValueConsulClient(this.consulRawClient);
+		queryClient = new QueryConsulClient(this.consulRawClient);
+		sessionClient = new SessionConsulClient(this.consulRawClient);
+		statusClient = new StatusConsulClient(this.consulRawClient);
 	}
 
 	/**
@@ -868,4 +870,12 @@ public class ConsulClient implements
 	public Response<List<String>> getStatusPeers() {
 		return statusClient.getStatusPeers();
 	}
+
+	// -------------------------------------------------------------------------------------------
+	// Refresh tls certs
+
+	public void refreshTlsConnection() {
+		this.consulRawClient.refreshTlsConnection();
+	}
+
 }
