@@ -63,7 +63,7 @@ def doUploadArchives = project.hasProperty('sonatypeUsername') && project.hasPro
 if (doUploadArchives) {
 	group = "com.ecwid.consul"
 	archivesBaseName = "consul-api"
-	version = "1.4.7"
+	version = "1.4.9"
 
 	signing {
 		sign configurations.archives
